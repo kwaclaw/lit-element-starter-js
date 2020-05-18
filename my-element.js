@@ -12,7 +12,11 @@
  * http://polymer.github.io/PATENTS.txt
  */
 
-import {LitElement, html, css} from 'lit-element';
+import { observable } from '@nx-js/observer-util';
+import { Queue, priorities } from '@nx-js/queue-util';
+import { html } from 'lit-html';
+import { LitMvvmElement } from '@kdsoft/lit-mvvm';
+import { css } from '../css-tag.js';
 
 /**
  * An example element.
@@ -20,7 +24,7 @@ import {LitElement, html, css} from 'lit-element';
  * @slot - This element has a slot
  * @csspart button - The button
  */
-export class MyElement extends LitElement {
+export class MyElement extends LitMvvmElement {
   static get styles() {
     return css`
       :host {
@@ -32,38 +36,25 @@ export class MyElement extends LitElement {
     `;
   }
 
-  static get properties() {
-    return {
-      /**
-       * The name to say "Hello" to.
-       */
-      name: {type: String},
-
-      /**
-       * The number of times the button has been clicked.
-       */
-      count: {type: Number},
-    };
-  }
-
   constructor() {
     super();
-    this.name = 'World';
-    this.count = 0;
+    this.scheduler = new Queue(priorities.HIGH);
+    // we must assign the model *after* the scheduler, or assign it externally
+    this.model = observable({ name: 'World', count: 0 })
   }
 
   render() {
     return html`
       <h1>Hello, ${this.name}!</h1>
       <button @click=${this._onClick} part="button">
-        Click Count: ${this.count}
+        Click Count: ${this.model.count}
       </button>
       <slot></slot>
     `;
   }
 
   _onClick() {
-    this.count++;
+    this.model.count++;
   }
 }
 

@@ -31,7 +31,9 @@
   "author": "The Polymer Authors",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "lit-element": "^2.3.1"
+    "@kdsoft/lit-mvvm": "^0.9.961",
+    "@nx-js/observer-util": "^4.2.2",
+    "@nx-js/queue-util": "^1.1.1"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.10.0",
